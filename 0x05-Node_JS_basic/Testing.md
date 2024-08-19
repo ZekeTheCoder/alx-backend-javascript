@@ -75,11 +75,3 @@ Jest is easier to set up with mock functions like jest.fn() and is integrated wi
 Mocha combined with Chai and Sinon gives you flexibility and power, especially in more complex scenarios. Mocha is more modular, allowing you to pick and choose libraries for different needs.
 
 Both testing frameworks can be used, but it often comes down to personal preference or the specific needs of your project.
-
-
-agric - crops
-flood detection - sea level
-waste - illegal dumping/fire and deforestation
-
-geo tool
-digital earth africa sandbox
