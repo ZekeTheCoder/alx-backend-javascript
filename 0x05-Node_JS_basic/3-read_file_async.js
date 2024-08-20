@@ -6,11 +6,13 @@ const countStudents = (path) => new Promise((resolve, reject) => {
       reject(new Error('Cannot load the database'));
     } else {
       const lines = data.trim().split('\n');
-      // remove header row and last row if it's empty
-      const students = lines.slice(1, data.length - 1);
-      console.log(`Number of students: ${students.length}`);
-
+      const students = lines.slice(1).filter((row) => row.trim() !== ''); // Remove empty lines
+      const response = [];
       const subjects = {};
+
+      const message1 = `Number of students: ${students.length}`;
+      console.log(message1);
+      response.push(message1);
 
       for (const row of students) {
         const student = row.split(',');
@@ -26,11 +28,13 @@ const countStudents = (path) => new Promise((resolve, reject) => {
       for (const field in subjects) {
         if (field) {
           const list = subjects[field];
-          console.log(`Number of students in ${field}: ${list.length}. List: ${list.join(', ')}`);
+          const message2 = `Number of students in ${field}: ${list.length}. List: ${list.join(', ')}`;
+          console.log(message2);
+          response.push(message2);
         }
       }
 
-      resolve();
+      resolve(response.join('\n'));
     }
   });
 });

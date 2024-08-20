@@ -1,65 +1,38 @@
 const http = require('http');
-const fs = require('fs');
+const countStudents = require('./3-read_file_async');
+
+const databasePath = process.argv[2];
+if (!databasePath) {
+  console.error('Usage: node 5-http.js <database_file_path>');
+  process.exit(1);
+}
 
 const hostname = '127.0.0.1';
 const port = 1245;
 
-const countStudents = (path) => new Promise((resolve, reject) => {
-  fs.readFile(path, { encoding: 'utf8' }, (err, data) => {
-    if (err) {
-      reject(new Error('Cannot load the database'));
+const app = http.createServer((request, response) => {
+  if (request.method === 'GET') {
+    if (request.url === '/') {
+      response.writeHead(200, { 'Content-Type': 'text/plain' });
+      response.end('Hello Holberton School!');
+    } else if (request.url === '/students') {
+      response.writeHead(200, { 'Content-Type': 'text/plain' });
+      countStudents(databasePath)
+        .then((data) => {
+          const output = `This is the list of our students\n${data}`;
+          response.end(output);
+        })
+        .catch((error) => {
+          response.writeHead(500, { 'Content-Type': 'text/plain' });
+          response.end(error.message);
+        });
     } else {
-      const lines = data.trim().split('\n');
-      const students = lines.slice(1, lines.length - 1);
-      let output = `Number of students: ${students.length}\n`;
-
-      const subjects = {};
-
-      for (const row of students) {
-        const student = row.split(',');
-        const field = student[3];
-        const name = student[0];
-
-        if (!subjects[field]) {
-          subjects[field] = [];
-        }
-        subjects[field].push(name);
-      }
-
-      for (const field in subjects) {
-        if (field) {
-          const list = subjects[field];
-          output += `Number of students in ${field}: ${list.length}. List: ${list.join(', ')}\n`;
-        }
-      }
-
-      resolve(output.trim());
-    }
-  });
-});
-
-// HTTP server
-const app = http.createServer(async (request, response) => {
-  response.statusCode = 200;
-  response.setHeader('Content-Type', 'text/plain');
-
-  const { url } = request;
-
-  if (url === '/') {
-    response.end('Hello Holberton School!');
-  } else if (url === '/students') {
-    response.write('This is the list of our students\n');
-    try {
-      const databasePath = process.argv[2];
-      const studentsData = await countStudents(databasePath);
-      response.end(studentsData);
-    } catch (error) {
-      response.statusCode = 500;
-      response.end(error.message);
+      response.writeHead(404, { 'Content-Type': 'text/plain' });
+      response.end('Not Found');
     }
   } else {
-    response.statusCode = 404;
-    response.end('Not Found');
+    response.writeHead(405, { 'Content-Type': 'text/plain' });
+    response.end('Method Not Allowed');
   }
 });
 
