@@ -6,25 +6,25 @@ const databasePath = process.argv[2];
 const hostname = '127.0.0.1';
 const port = 1245;
 
-const app = http.createServer((request, response) => {
-  if (request.url === '/') {
-    response.writeHead(200, { 'Content-Type': 'text/plain' });
-    response.end('Hello Holberton School!');
-  } else if (request.url === '/students') {
-    response.writeHead(200, { 'Content-Type': 'text/plain' });
-    countStudents(databasePath)
-      .then((data) => {
-        const output = `This is the list of our students\n${data}`;
-        response.end(output);
-      })
-      .catch((error) => {
-        response.writeHead(500, { 'Content-Type': 'text/plain' });
-        response.end(error.message);
-      });
-  } else {
-    response.writeHead(404, { 'Content-Type': 'text/plain' });
-    response.end('Not Found');
+const app = http.createServer(async (request, response) => {
+  response.statusCode = 200;
+  response.setHeader('Content-Type', 'text/plain');
+
+  const { url } = request;
+
+  if (url === '/') {
+    response.write('Hello Holberton School!');
+  } else if (url === '/students') {
+    response.write('This is the list of our students\n');
+    try {
+      const studentsData = await countStudents(databasePath);
+      response.end(studentsData);
+    } catch (error) {
+      response.end(error.message);
+    }
   }
+  response.statusCode = 404;
+  response.end();
 });
 
 app.listen(port, hostname, () => {
