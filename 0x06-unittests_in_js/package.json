@@ -1,0 +1,15 @@
+{
+	"name": "task_0",
+	"version": "1.0.0",
+	"description": "0x06. Unittests in JS",
+	"scripts": {
+		"test": "mocha"
+	},
+	"author": "",
+	"license": "ISC",
+	"dependencies": {},
+	"devDependencies": {
+		"mocha": "^8.4.0"
+	},
+	"type": "commonjs"
+}
