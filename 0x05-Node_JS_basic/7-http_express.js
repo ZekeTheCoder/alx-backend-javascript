@@ -11,7 +11,7 @@ app.get('/', (request, response) => {
   response.send('Hello Holberton School!');
 });
 
-app.get('/students', async (request, response) => {
+app.get('/students', (request, response) => {
   countStudents(databasePath)
     .then((output) => {
       response.send(['This is the list of our students', output].join('\n'));
