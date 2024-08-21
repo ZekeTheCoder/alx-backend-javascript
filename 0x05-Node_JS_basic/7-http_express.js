@@ -12,12 +12,13 @@ app.get('/', (request, response) => {
 });
 
 app.get('/students', async (request, response) => {
-  try {
-    const studentsData = await countStudents(databasePath);
-    response.status(200).send(`This is the list of our students\n${studentsData}`);
-  } catch (error) {
-    response.status(500).send(error.message);
-  }
+  countStudents(databasePath)
+    .then((output) => {
+      response.send(['This is the list of our students', output].join('\n'));
+    })
+    .catch((error) => {
+      response.status(500).send(error.message);
+    });
 });
 
 app.listen(port, hostname, () => {
