@@ -7,7 +7,9 @@
 	},
 	"author": "",
 	"license": "ISC",
-	"dependencies": {},
+	"dependencies": {
+		"chai": "^4.3.6"
+	},
 	"devDependencies": {
 		"mocha": "^8.4.0"
 	},
