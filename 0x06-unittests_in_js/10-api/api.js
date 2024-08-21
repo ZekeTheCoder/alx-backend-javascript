@@ -14,19 +14,7 @@ app.get('/cart/:id([0-9]+)', (req, res) => {
 });
 
 app.get('/available_payments', (req, res) => {
-  const responseObject = {
-    payment_methods: {
-      credit_cards: true,
-      paypal: false,
-    },
-  };
-  
-  // Convert the object to a pretty-printed JSON string
-  const prettyPrintedJson = JSON.stringify(responseObject, null, 2);
-  
-  // Send the pretty-printed JSON string as the response
-  res.type('json').send(prettyPrintedJson);
-	// res.json({ payment_methods: { credit_cards: true, paypal: false } });
+	res.json({ payment_methods: { credit_cards: true, paypal: false } });
 });
 
 app.post('/login', (req, res) => {
